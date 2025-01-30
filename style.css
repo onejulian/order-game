@@ -1,0 +1,326 @@
+/* style.css */
+:root {
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --header-background-color: #333;
+    --header-text-color: white;
+    --button-background-color: #5cb85c;
+    --button-text-color: white;
+    --button-hover-background-color: #4cae4c;
+    --paragraph-box-background-color: white;
+    --paragraph-box-border-color: #ccc;
+    --dragging-opacity: 0.5;
+    --dragging-border-color: #5cb85c;
+    --success-background-color: #d4edda;
+    --success-text-color: #155724;
+    --success-border-color: #c3e6cb;
+    --error-background-color: #f8d7da;
+    --error-text-color: #721c24;
+    --error-border-color: #f5c6cb;
+    --modal-background-color: rgba(0, 0, 0, 0.4);
+    --modal-content-background-color: #fefefe;
+    --modal-content-border-color: #888;
+    --sidebar-background-color: #ddd;
+    --sidebar-text-color: #333;
+    --sidebar-border-color: #ccc;
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--header-background-color);
+    color: var(--header-text-color);
+    padding: 1em;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+#menu-button {
+    background: none;
+    color: var(--header-text-color);
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -290px;
+    /* Oculto inicialmente */
+    width: 250px;
+    height: 100%;
+    background-color: var(--sidebar-background-color);
+    color: var(--sidebar-text-color);
+    padding: 20px;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+    /* Mostrar sidebar */
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--sidebar-border-color);
+    cursor: pointer;
+}
+
+.sidebar ul li:last-child {
+    border-bottom: none;
+}
+
+main {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 60px;
+    /* Añadido padding-bottom para evitar que el footer tape el contenido */
+}
+
+.screen {
+    width: 95%;
+    max-width: 600px;
+    /* Limitar ancho en pantallas grandes */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+.screen.active {
+    display: flex;
+    /* o block, según el diseño */
+    flex-direction: column;
+    align-items: center;
+}
+
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: var(--button-hover-background-color);
+}
+
+#paragraph-boxes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    overflow-y: auto;
+    /* Añadido para scroll vertical */
+    max-height: 500px;
+    /* Opcional: ajusta este valor según necesites */
+}
+
+.paragraph-box {
+    background-color: var(--paragraph-box-background-color);
+    border: 1px solid var(--paragraph-box-border-color);
+    padding: 15px;
+    cursor: grab;
+    user-select: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+    /* Para que el texto largo se ajuste */
+}
+
+.paragraph-box.dragging {
+    opacity: var(--dragging-opacity);
+    border: 2px dashed var(--dragging-border-color);
+}
+
+#timer {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+#game-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+#game-message.success {
+    background-color: var(--success-background-color);
+    color: var(--success-text-color);
+    border: 1px solid var(--success-border-color);
+}
+
+#game-message.error {
+    background-color: var(--error-background-color);
+    color: var(--error-text-color);
+    border: 1px solid var(--error-border-color);
+}
+
+.modal {
+    display: none;
+    /* Oculto por defecto */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: var(--modal-background-color);
+    /* Black w/ opacity */
+}
+
+.modal.show {
+    display: block;
+    /* Mostrar modal */
+}
+
+.modal-content {
+    background-color: var(--modal-content-background-color);
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid var(--modal-content-border-color);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    border-radius: 5px;
+    text-align: center;
+}
+
+footer {
+    text-align: center;
+    padding: 1em;
+    background-color: var(--header-background-color);
+    color: var(--header-text-color);
+    position: fixed;
+    /* Fijo al fondo */
+    bottom: 0;
+    width: 100%;
+}
+
+/* Estilos para partidas guardadas */
+#saved-game-text-container,
+#saved-game-paragraph-boxes-container {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid var(--paragraph-box-border-color);
+    background-color: var(--paragraph-box-background-color);
+    text-align: left;
+    /* Alineación del texto */
+}
+
+#saved-game-paragraph-boxes-container {
+    overflow-y: auto;
+    /* Añadido para scroll vertical */
+    max-height: 300px;
+    /* Opcional: ajusta este valor según necesites, menos altura para "Partidas Guardadas" */
+}
+
+#saved-game-paragraph-boxes-container .paragraph-box {
+    margin-bottom: 10px;
+}
+
+.game-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Media query para pantallas más grandes (ejemplo, tablets y desktops) */
+@media (min-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    .screen {
+        max-width: 800px;
+    }
+
+    button {
+        padding: 15px 30px;
+        font-size: 1.2em;
+    }
+}
+
+/* Estilos para modo oscuro */
+body.dark-mode {
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --header-background-color: #1f1f1f;
+    --header-text-color: #e0e0e0;
+    --button-background-color: #014421;
+    --button-text-color: #e0e0e0;
+    --button-hover-background-color: #016d38;
+    --paragraph-box-background-color: #1f1f1f;
+    --paragraph-box-border-color: #505050;
+    --dragging-opacity: 0.7;
+    --dragging-border-color: #016d38;
+    --success-background-color: #155724;
+    --success-text-color: #d4edda;
+    --success-border-color: #c3e6cb;
+    --error-background-color: #721c24;
+    --error-text-color: #f8d7da;
+    --error-border-color: #f5c6cb;
+    --modal-background-color: rgba(0, 0, 0, 0.7);
+    --modal-content-background-color: #1f1f1f;
+    --modal-content-border-color: #888;
+    --sidebar-background-color: #1f1f1f;
+    --sidebar-text-color: #e0e0e0;
+    --sidebar-border-color: #505050;
+}
+
+body.dark-mode .paragraph-box {
+    box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.1);
+}
+
+.hidden {
+    display: none;
+}
