@@ -383,3 +383,27 @@ html {
     scrollbar-width: none;
     /* Firefox */
 }
+
+.scroll-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    /* Espacio entre los botones y las cajas */
+}
+
+.scroll-button {
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: var(--button-background-color);
+    color: var(--button-text-color);
+    border: none;
+    border-radius: 5px;
+    margin: 0;
+    /* Eliminar margen */
+}
+
+.scroll-button:hover {
+    background-color: var(--button-hover-background-color);
+}

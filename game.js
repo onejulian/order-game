@@ -9,7 +9,7 @@ function createParagraphBoxes(paragraphs) {
         box.classList.add('paragraph-box');
         box.textContent = paragraph;
         box.setAttribute('draggable', true);
-        box.dataset.index = index; 
+        box.dataset.index = index;
         return box;
     });
     return boxes;
@@ -25,7 +25,48 @@ function shuffleArray(array) {
 
 function displayParagraphBoxes(boxes, containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = ''; 
+    container.innerHTML = ''; // Limpiar solo las cajas, no los botones
+
+    if (containerId === 'paragraph-boxes-container') {
+        // Verificar si los botones ya existen
+        let upButton = container.parentNode.querySelector('.up-button');
+        let downButton = container.parentNode.querySelector('.down-button');
+
+        if (!upButton) {
+            upButton = document.createElement('button');
+            upButton.textContent = '↑';
+            upButton.classList.add('scroll-button', 'up-button');
+            upButton.addEventListener('click', () => {
+                container.scrollTop -= 50;
+            });
+        }
+
+        if (!downButton) {
+            downButton = document.createElement('button');
+            downButton.textContent = '↓';
+            downButton.classList.add('scroll-button', 'down-button');
+            downButton.addEventListener('click', () => {
+                container.scrollTop += 50;
+            });
+        }
+
+        // Añadir botones al contenedor de botones si no existen
+        let buttonContainer = container.parentNode.querySelector('.scroll-buttons-container');
+        if (!buttonContainer) {
+            buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('scroll-buttons-container');
+            container.parentNode.insertBefore(buttonContainer, container);
+        }
+
+        if (!buttonContainer.contains(upButton)) {
+            buttonContainer.appendChild(upButton);
+        }
+
+        if (!buttonContainer.contains(downButton)) {
+            buttonContainer.appendChild(downButton);
+        }
+    }
+
     boxes.forEach(box => container.appendChild(box));
 }
 
@@ -54,10 +95,10 @@ function reorderParagraphBoxes(containerId, order) {
     boxes.forEach(box => {
         const originalIndex = parseInt(box.dataset.index);
         const currentPosition = Array.from(container.children).indexOf(box);
-        orderedBoxes[currentPosition] = box; 
+        orderedBoxes[currentPosition] = box;
     });
 
-    container.innerHTML = ''; 
+    container.innerHTML = '';
 
     order.forEach(index => {
         const boxToAppend = orderedBoxes.find(box => parseInt(box.dataset.index) === index);

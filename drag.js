@@ -9,7 +9,7 @@ function enableDragAndDrop(containerId) {
         if (event.type === 'touchstart') {
             event.preventDefault();
             const touch = event.changedTouches[0];
-            event.dataTransfer.setData('text', touch.target.id); 
+            event.dataTransfer.setData('text', touch.target.id);
         }
     }
 
@@ -19,7 +19,7 @@ function enableDragAndDrop(containerId) {
     }
 
     function handleDragOver(event) {
-        event.preventDefault(); 
+        event.preventDefault();
     }
 
     function handleDrop(event) {
@@ -43,7 +43,7 @@ function enableDragAndDrop(containerId) {
 
     function handleTouchMove(event) {
         if (!draggedItem) return;
-        event.preventDefault(); 
+        event.preventDefault();
 
         const touch = event.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -54,9 +54,15 @@ function enableDragAndDrop(containerId) {
             const targetIndex = Array.from(parent.children).indexOf(target);
 
             if (draggedIndex < targetIndex) {
-                parent.insertBefore(draggedItem, target.nextElementSibling);
+                // Comprobar si el elemento a insertar ya es el siguiente hermano
+                if (draggedItem.nextElementSibling !== target.nextElementSibling) {
+                    parent.insertBefore(draggedItem, target.nextElementSibling);
+                }
             } else {
-                parent.insertBefore(draggedItem, target);
+                // Comprobar si el elemento a insertar ya es el mismo
+                if (draggedItem !== target) {
+                    parent.insertBefore(draggedItem, target);
+                }
             }
         }
     }
