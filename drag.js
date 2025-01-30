@@ -2,20 +2,26 @@
 function enableDragAndDrop(containerId) {
     const container = document.getElementById(containerId);
     let draggedItem = null;
+    let offsetY = 0; // Desplazamiento vertical relativo al elemento arrastrado
 
     function handleDragStart(event) {
         draggedItem = event.target;
         event.target.classList.add('dragging');
+
         if (event.type === 'touchstart') {
             event.preventDefault();
             const touch = event.changedTouches[0];
+            offsetY = touch.clientY - event.target.getBoundingClientRect().top; // Calcula el desplazamiento inicial
             event.dataTransfer.setData('text', touch.target.id);
+        } else {
+            offsetY = event.offsetY; // Para eventos de mouse, usa offsetY directamente
         }
     }
 
     function handleDragEnd(event) {
         event.target.classList.remove('dragging');
         draggedItem = null;
+        offsetY = 0; // Reinicia el desplazamiento
     }
 
     function handleDragOver(event) {
@@ -48,18 +54,26 @@ function enableDragAndDrop(containerId) {
         const touch = event.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
 
+        // Desplazamiento automático
+        const containerRect = container.getBoundingClientRect();
+        const threshold = 20; // Define una zona cerca del borde para activar el desplazamiento
+
+        if (touch.clientY - containerRect.top < threshold) {
+            container.scrollTop -= 10; // Desplazarse hacia arriba
+        } else if (containerRect.bottom - touch.clientY < threshold) {
+            container.scrollTop += 10; // Desplazarse hacia abajo
+        }
+
         if (target && target !== draggedItem && target.classList.contains('paragraph-box')) {
             const parent = container;
             const draggedIndex = Array.from(parent.children).indexOf(draggedItem);
             const targetIndex = Array.from(parent.children).indexOf(target);
 
             if (draggedIndex < targetIndex) {
-                // Comprobar si el elemento a insertar ya es el siguiente hermano
                 if (draggedItem.nextElementSibling !== target.nextElementSibling) {
                     parent.insertBefore(draggedItem, target.nextElementSibling);
                 }
             } else {
-                // Comprobar si el elemento a insertar ya es el mismo
                 if (draggedItem !== target) {
                     parent.insertBefore(draggedItem, target);
                 }
@@ -72,6 +86,7 @@ function enableDragAndDrop(containerId) {
         event.preventDefault();
         draggedItem.classList.remove('dragging');
         draggedItem = null;
+        offsetY = 0; // Reinicia el desplazamiento
     }
 
     container.addEventListener('dragstart', handleDragStart);
