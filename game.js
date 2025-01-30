@@ -25,19 +25,63 @@ function shuffleArray(array) {
 
 function displayParagraphBoxes(boxes, containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Limpiar solo las cajas, no los botones
+    container.innerHTML = '';
 
     if (containerId === 'paragraph-boxes-container') {
-        // Verificar si los botones ya existen
         let upButton = container.parentNode.querySelector('.up-button');
         let downButton = container.parentNode.querySelector('.down-button');
+        let scrollInterval;
+        let touchTimeout; // Nuevo timeout para diferenciar entre toque simple y mantener presionado
+
+        const startScrolling = (direction) => {
+            clearInterval(scrollInterval);
+            scrollInterval = setInterval(() => {
+                container.scrollTop += direction;
+            }, 100);
+        };
+
+        const stopScrolling = () => {
+            clearInterval(scrollInterval);
+        };
+
+        // Función para desplazamiento a pasos (toque simple)
+        const stepScroll = (direction) => {
+            container.scrollTop += direction;
+        };
 
         if (!upButton) {
             upButton = document.createElement('button');
             upButton.textContent = '↑';
             upButton.classList.add('scroll-button', 'up-button');
-            upButton.addEventListener('click', () => {
-                container.scrollTop -= 50;
+
+            // Eventos para mouse
+            upButton.addEventListener('mousedown', () => {
+                touchTimeout = setTimeout(() => startScrolling(-50), 200); // Iniciar desplazamiento continuo después de 200ms
+            });
+            upButton.addEventListener('mouseup', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            upButton.addEventListener('mouseleave', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            upButton.addEventListener('click', () => stepScroll(-50)); // Desplazamiento a pasos con clic
+
+            // Eventos para pantallas táctiles
+            upButton.addEventListener('touchstart', () => {
+                touchTimeout = setTimeout(() => startScrolling(-50), 200); // Iniciar desplazamiento continuo después de 200ms
+            });
+            upButton.addEventListener('touchend', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            upButton.addEventListener('touchcancel', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            upButton.addEventListener('contextmenu', (event) => {
+                event.preventDefault();
             });
         }
 
@@ -45,12 +89,39 @@ function displayParagraphBoxes(boxes, containerId) {
             downButton = document.createElement('button');
             downButton.textContent = '↓';
             downButton.classList.add('scroll-button', 'down-button');
-            downButton.addEventListener('click', () => {
-                container.scrollTop += 50;
+
+            // Eventos para mouse
+            downButton.addEventListener('mousedown', () => {
+                touchTimeout = setTimeout(() => startScrolling(50), 200); // Iniciar desplazamiento continuo después de 200ms
+            });
+            downButton.addEventListener('mouseup', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            downButton.addEventListener('mouseleave', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            downButton.addEventListener('click', () => stepScroll(50)); // Desplazamiento a pasos con clic
+
+            // Eventos para pantallas táctiles
+            downButton.addEventListener('touchstart', () => {
+                touchTimeout = setTimeout(() => startScrolling(50), 200); // Iniciar desplazamiento continuo después de 200ms
+            });
+            downButton.addEventListener('touchend', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            downButton.addEventListener('touchcancel', () => {
+                clearTimeout(touchTimeout);
+                stopScrolling();
+            });
+            downButton.addEventListener('contextmenu', (event) => {
+                event.preventDefault();
             });
         }
 
-        // Añadir botones al contenedor de botones si no existen
+        // Añadir botones al contenedor
         let buttonContainer = container.parentNode.querySelector('.scroll-buttons-container');
         if (!buttonContainer) {
             buttonContainer = document.createElement('div');

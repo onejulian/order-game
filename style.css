@@ -407,3 +407,12 @@ html {
 .scroll-button:hover {
     background-color: var(--button-hover-background-color);
 }
+
+.scroll-button {
+    /* ... (otros estilos de los botones) */
+    -webkit-user-select: none;  /* Para navegadores basados en WebKit (Chrome, Safari) */
+    -moz-user-select: none;     /* Para Firefox */
+    -ms-user-select: none;      /* Para Internet Explorer/Edge */
+    user-select: none;          /* Estándar */
+    -webkit-tap-highlight-color: transparent; /* Para evitar el resaltado en algunos dispositivos iOS */
+}
