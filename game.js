@@ -178,3 +178,77 @@ function reorderParagraphBoxes(containerId, order) {
         }
     });
 }
+
+function handleTouchMove(event) {
+    if (!draggedItem) return;
+    event.preventDefault();
+
+    const touch = event.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+
+    // Desplazamiento automático
+    const containerRect = container.getBoundingClientRect();
+    const threshold = 20;
+
+    if (touch.clientY - containerRect.top < threshold) {
+        container.scrollTop -= 10;
+    } else if (containerRect.bottom - touch.clientY < threshold) {
+        container.scrollTop += 10;
+    }
+
+    if (
+        target &&
+        target !== draggedItem &&
+        target.classList.contains("paragraph-box")
+    ) {
+        const parent = container;
+        const draggedIndex = Array.from(parent.children).indexOf(draggedItem);
+        const targetIndex = Array.from(parent.children).indexOf(target);
+
+        if (draggedIndex < targetIndex) {
+            if (draggedItem.nextElementSibling !== target.nextElementSibling) {
+                parent.insertBefore(draggedItem, target.nextElementSibling);
+            }
+        } else {
+            if (draggedItem !== target) {
+                parent.insertBefore(draggedItem, target);
+            }
+        }
+        // Guardar el orden actual después de cada movimiento
+        if (currentGame) {
+            currentGame.currentParagraphOrder = getCurrentParagraphOrder('paragraph-boxes-container');
+            saveGame(currentGame);
+        }
+    }
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    // Guardar el orden actual después del evento dragover
+    if (currentGame) {
+        currentGame.currentParagraphOrder = getCurrentParagraphOrder('paragraph-boxes-container');
+        saveGame(currentGame);
+    }
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    if (event.target.classList.contains('paragraph-box') && event.target !== draggedItem) {
+        const targetItem = event.target;
+        const parent = container;
+        const draggedIndex = Array.from(parent.children).indexOf(draggedItem);
+        const targetIndex = Array.from(parent.children).indexOf(targetItem);
+
+        if (draggedIndex < targetIndex) {
+            parent.insertBefore(draggedItem, targetItem.nextElementSibling);
+        } else {
+            parent.insertBefore(draggedItem, targetItem);
+        }
+
+        // Guardar el orden actual después de soltar el elemento
+        if (currentGame) {
+            currentGame.currentParagraphOrder = getCurrentParagraphOrder('paragraph-boxes-container');
+            saveGame(currentGame);
+        }
+    }
+}

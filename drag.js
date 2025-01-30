@@ -12,7 +12,7 @@ function enableDragAndDrop(containerId) {
             event.preventDefault();
             const touch = event.changedTouches[0];
             offsetY = touch.clientY - event.target.getBoundingClientRect().top; // Calcula el desplazamiento inicial
-            event.dataTransfer.setData('text', touch.target.id);
+            // event.dataTransfer.setData('text', touch.target.id);
         } else {
             offsetY = event.offsetY; // Para eventos de mouse, usa offsetY directamente
         }

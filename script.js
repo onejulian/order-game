@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             gameMessage.classList.add('hidden');
-            console.log("Message hidden");
+            // console.log("Message hidden");
         }, 4000);
     }
 
@@ -83,12 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmationDialog.classList.remove('show');
     }
     function startNewGame(text) {
-        console.log("startNewGame function called with text:", text);
+        // console.log("startNewGame function called with text:", text);
         originalParagraphs = parseParagraphs(text);
-        console.log("Parsed paragraphs:", originalParagraphs);
+        // console.log("Parsed paragraphs:", originalParagraphs);
         if (originalParagraphs.length < 2) {
             displayMessage('El texto debe tener al menos dos párrafos.', false);
-            console.log("Text has less than 2 paragraphs - aborting");
+            // console.log("Text has less than 2 paragraphs - aborting");
             return;
         }
 
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen(gameScreen);
         clearMessage();
         backHomeButton.classList.add('hidden');
-        console.log("Game started successfully!");
+        // console.log("Game started successfully!");
     }
 
     function finishGame() {
@@ -226,12 +226,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('beforeunload', (event) => {
         if (currentGame && currentGame.status === 'playing') {
-            event.preventDefault();
-            event.returnValue = '';
-            // showConfirmationDialog(); 
-            return '';
+          // Guardar el estado actual del juego antes de que se cierre la página
+          currentGame.currentParagraphOrder = getCurrentParagraphOrder(
+            "paragraph-boxes-container"
+          );
+          saveGame(currentGame);
+          // Eliminar la restricción para evitar la confirmación de recarga
+          delete event["returnValue"];
         }
-    });
+      });
 
     showScreen(startScreen);
     loadSavedGamesList();
